@@ -27,7 +27,7 @@
         "build": "pnpm -r build",
         "start": "pnpm build && pnpm -F @ocean-blue/server start",
         "smoke:tunnel": "pnpm build && node scripts/tunnel-smoke/run-baseline.mjs",
-        "publish:cli": "pnpm -F ocean-blue deploy"
+        "publish:cli": "pnpm -F ocean-blue run publish:npm"
     },
     "engines": {
         "node": ">=22.12.0",

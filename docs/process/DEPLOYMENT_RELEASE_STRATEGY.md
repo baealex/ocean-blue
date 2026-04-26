@@ -5,36 +5,29 @@ Updated: 2026-04-26
 ## 1. Current Deployment Channels
 1. npm distribution
 - Published package: `ocean-blue` (`packages/cli`)
-- Run via: `npx ocean-blue` or `npx ocean-blue@<version>`
+- Run via: `npx ocean-blue`
 - Publish mode: local maintainer machine only
 
 2. Docker distribution
 - Image: `baealex/ocean-blue`
-- Tags: manually selected during workflow dispatch, for example `latest` or `0.1.0`
+- Tag: `latest`
 - Multi-arch targets: `linux/amd64`, `linux/arm64/v8`
 - Publish mode: manual GitHub Actions workflow dispatch
 
 3. Source-based run
 - `pnpm install && pnpm build && pnpm start`
 
-## 2. Versioned Install and Run Rules
-1. Production
-- CLI: `npx ocean-blue@<exact-version>`
-- Docker: `baealex/ocean-blue:<exact-version>`
-- Do not use floating `latest` in production.
-
-2. Fast trial/development
-- CLI: `npx ocean-blue` or `npx ocean-blue@latest`
-- Docker: `baealex/ocean-blue:latest`
-
-3. Rollback target
-- CLI: `npx ocean-blue@<previous-version>`
-- Docker: `baealex/ocean-blue:<previous-version>`
+## 2. Initial Release Policy
+- Ocean Blue does not use Git release tags yet.
+- Ocean Blue does not maintain Docker version tags yet.
+- Docker publishing uses `baealex/ocean-blue:latest` only.
+- CLI publishing is still npm-based, so `packages/cli/package.json` must contain a valid npm package version.
+- Do not introduce release tags, versioned Docker tags, or automated publish triggers until the release process is intentionally upgraded.
 
 ## 3. Release Trigger Policy
 - Ocean Blue does not publish npm packages automatically from GitHub Actions.
 - CLI npm publish is always a local maintainer action.
-- Docker image publish is always a manual GitHub Actions dispatch.
+- Docker image publish is always a manual GitHub Actions dispatch and always pushes `latest`.
 - CI success is required before release, but CI success does not trigger deployment by itself.
 
 ## 4. CLI npm Release Runbook
@@ -44,7 +37,7 @@ Updated: 2026-04-26
 node -p "require('./packages/cli/package.json').version"
 ```
 
-2. Confirm the version is not already published.
+2. Confirm the package version is not already published.
 
 ```bash
 npm view ocean-blue@<version> version
@@ -99,13 +92,7 @@ gh run list --workflow ci.yml --limit 5
 2. Open the manual Docker image workflow.
 
 ```bash
-gh workflow run BUILD_IMAGE.yml -f tag=<version>
-```
-
-For a development or trial image, use:
-
-```bash
-gh workflow run BUILD_IMAGE.yml -f tag=latest
+gh workflow run BUILD_IMAGE.yml
 ```
 
 3. Monitor the workflow.
@@ -117,20 +104,14 @@ gh run list --workflow BUILD_IMAGE.yml --limit 5
 4. Verify the pushed image.
 
 ```bash
-docker pull baealex/ocean-blue:<version>
+docker pull baealex/ocean-blue:latest
 ```
 
 ## 6. Version and Tag Policy
 - CLI package version is controlled by `packages/cli/package.json`.
-- Docker tag is selected manually when running `BUILD_IMAGE.yml`.
-- Use exact semver tags for production images, for example `0.1.0`.
-- Use `latest` only for trial or development distribution.
-- Git tags are release records, not automatic deployment triggers.
-
-Recommended release record tags:
-- CLI release: `cli-v<version>`
-- Docker image release: `docker-v<version>`
-- Combined release: `v<version>`
+- Docker image publishing currently uses `latest` only.
+- Git release tags are not part of the current release process.
+- Do not add versioned Docker tags until the deployment policy is updated first.
 
 ## 7. Recovery Guide
 1. If npm publish fails before the package is created, fix the issue and rerun:
@@ -146,21 +127,21 @@ npm view ocean-blue@<version>
 npx ocean-blue@<version> --version
 ```
 
-3. If Docker publish fails, rerun the manual workflow with the same tag after fixing the issue.
+3. If Docker publish fails, rerun the manual workflow after fixing the issue.
 
 ```bash
-gh workflow run BUILD_IMAGE.yml -f tag=<version>
+gh workflow run BUILD_IMAGE.yml
 ```
 
-4. If the wrong Docker tag was pushed, publish the correct tag and avoid using the bad tag.
-DockerHub tags are mutable, but production users should move only to verified exact tags.
+4. If a bad `latest` image was pushed, fix the issue and rerun the manual workflow.
+DockerHub tags are mutable, so the new `latest` image replaces the previous one.
 
 ## 8. Release Note Policy
 1. Release notes are required for public releases.
-2. Before writing the note, inspect the range:
+2. Before writing the note, inspect the relevant commits:
 
 ```bash
-git log <previous-release-tag>..HEAD --pretty=format:"%h %s"
+git log --pretty=format:"%h %s"
 ```
 
 3. Patch release notes should be short and user-facing.

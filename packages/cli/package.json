@@ -22,7 +22,7 @@
         "test:ci": "vitest run",
         "type-check": "tsc --noEmit",
         "prepublishOnly": "pnpm build",
-        "deploy": "pnpm test:ci && npm publish --access public"
+        "publish:npm": "pnpm test:ci && npm publish --access public"
     },
     "keywords": [
         "tunnel",
@@ -51,7 +51,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/baealex/ocean-blue"
+        "url": "git+https://github.com/baealex/ocean-blue.git"
     },
     "bugs": {
         "url": "https://github.com/baealex/ocean-blue/issues"

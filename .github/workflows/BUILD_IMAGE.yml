@@ -2,11 +2,6 @@ name: BUILD IMAGE
 
 on:
   workflow_dispatch:
-    inputs:
-      tag:
-        description: Docker image tag to publish
-        required: true
-        default: latest
 
 jobs:
   build:
@@ -31,6 +26,6 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64/v8
           push: true
-          tags: baealex/ocean-blue:${{ inputs.tag }}
+          tags: baealex/ocean-blue:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
