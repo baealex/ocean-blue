@@ -1,0 +1,60 @@
+{
+    "name": "ocean-blue",
+    "version": "0.1.0",
+    "description": "CLI client for Ocean Blue tunneling service",
+    "type": "module",
+    "main": "dist/index.js",
+    "bin": {
+        "ocean-blue": "dist/cli.js"
+    },
+    "files": [
+        "dist",
+        "README.md",
+        "LICENSE"
+    ],
+    "scripts": {
+        "build": "tsup",
+        "dev": "tsx watch src/index.ts",
+        "dev:local": "OCEAN_BLUE_SERVER=http://localhost:25830 SERVER_URL=http://localhost:25830 tsx watch src/index.ts",
+        "lint": "biome lint src",
+        "start": "node dist/index.js",
+        "test": "vitest",
+        "test:ci": "vitest run",
+        "type-check": "tsc --noEmit",
+        "prepublishOnly": "pnpm build",
+        "deploy": "pnpm test:ci && npm publish --access public"
+    },
+    "keywords": [
+        "tunnel",
+        "ngrok",
+        "proxy",
+        "ocean-blue",
+        "cli"
+    ],
+    "author": "baealex <baealex@outlook.kr>",
+    "license": "MIT",
+    "dependencies": {
+        "chalk": "^4.1.2",
+        "commander": "^11.1.0",
+        "open": "^8.4.2",
+        "uuid": "^14.0.0",
+        "ws": "^8.18.3"
+    },
+    "devDependencies": {
+        "@ocean-blue/shared": "workspace:*",
+        "@types/node": "^20.19.4",
+        "@types/uuid": "^9.0.8",
+        "@types/ws": "^8.18.1",
+        "tsup": "^8.0.0",
+        "tsx": "^4.0.0",
+        "typescript": "^6.0.3"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/baealex/ocean-blue"
+    },
+    "bugs": {
+        "url": "https://github.com/baealex/ocean-blue/issues"
+    },
+    "homepage": "https://github.com/baealex/ocean-blue#readme"
+}

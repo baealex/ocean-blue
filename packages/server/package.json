@@ -1,0 +1,58 @@
+{
+    "name": "@ocean-blue/server",
+    "version": "1.0.0",
+    "private": true,
+    "description": "Ocean Blue tunnel server",
+    "type": "module",
+    "scripts": {
+        "dev": "npx prisma migrate dev && BASE_URL=http://localhost:25830 tsx --watch src/main.ts",
+        "build": "npx prisma generate && tsup && tsc-alias",
+        "start": "npx prisma migrate deploy && node dist/main.js",
+        "lint": "biome lint src",
+        "test": "vitest",
+        "test:ci": "vitest run",
+        "type-check": "npx prisma generate && tsc --noEmit"
+    },
+    "author": "",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/baealex/ocean-blue"
+    },
+    "bugs": {
+        "url": "https://github.com/baealex/ocean-blue/issues"
+    },
+    "homepage": "https://github.com/baealex/ocean-blue#readme",
+    "dependencies": {
+        "@baejino/auth": "0.1.1",
+        "@graphql-tools/schema": "^10.0.23",
+        "@graphql-tools/utils": "^10.8.6",
+        "@ocean-blue/shared": "workspace:*",
+        "@prisma/client": "^6.9.0",
+        "@types/ws": "^8.18.1",
+        "express": "^5.2.1",
+        "express-rate-limit": "^7.5.0",
+        "express-session": "^1.19.0",
+        "express-winston": "^4.2.0",
+        "graphql": "^16.12.0",
+        "graphql-http": "^1.22.4",
+        "helmet": "^8.1.0",
+        "isomorphic-dompurify": "^3.10.0",
+        "logform": "^2.7.0",
+        "marked": "^16.2.0",
+        "module-alias": "^2.2.3",
+        "prisma": "^6.9.0",
+        "uuid": "^14.0.0",
+        "winston": "^3.17.0",
+        "ws": "^8.18.3"
+    },
+    "devDependencies": {
+        "@types/express": "^5.0.6",
+        "@types/express-session": "^1.19.0",
+        "glob": "^11.0.0",
+        "tsc-alias": "^1.8.10",
+        "tsup": "^8.0.0",
+        "tsx": "^4.0.0",
+        "typescript": "^6.0.3"
+    }
+}

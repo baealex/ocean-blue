@@ -1,0 +1,14 @@
+version: "2.1"
+
+services:
+  app:
+    # image: USERNAME/ocean-blue-tunnel:TAG
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - ./data:/data
+    ports:
+      - "${OCEAN_BLUE_PORT:-25830}:25830"

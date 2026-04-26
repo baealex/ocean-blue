@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+        "outDir": "dist",
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "moduleResolution": "Node16",
+        "baseUrl": "src",
+        "target": "ES2022",
+        "module": "Node16",
+        "strict": true,
+        "ignoreDeprecations": "6.0",
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "declaration": true,
+        "declarationMap": true,
+        "sourceMap": true,
+        "paths": {
+            "~/*": [
+                "./*"
+            ]
+        }
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "tsx": {
+        "tsconfig": "./tsconfig.json"
+    }
+}

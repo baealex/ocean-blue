@@ -1,0 +1,50 @@
+{
+    "name": "@ocean-blue/web",
+    "private": true,
+    "version": "0.0.0",
+    "description": "Ocean Blue web frontend",
+    "license": "MIT",
+    "type": "module",
+    "scripts": {
+        "dev": "vite build --watch --mode development",
+        "build": "vite build",
+        "lint": "biome lint src",
+        "preview": "vite preview",
+        "test": "vitest",
+        "test:ci": "vitest run",
+        "type-check": "tsc --noEmit"
+    },
+    "dependencies": {
+        "@baejino/auth": "0.1.1",
+        "@baejino/handy": "^0.2.3",
+        "@baejino/react-ui": "0.2.0",
+        "@monaco-editor/react": "^4.7.0",
+        "@tanstack/react-query": "^5.80.6",
+        "axios": "^1.15.2",
+        "classnames": "^2.5.1",
+        "react": "^19.1.0",
+        "react-dom": "^19.1.0",
+        "react-hook-form": "^7.57.0",
+        "react-icons": "^5.5.0",
+        "react-router-dom": "^7.14.2",
+        "zustand": "^5.0.6"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.29.0",
+        "@babel/preset-env": "^7.27.2",
+        "@rolldown/plugin-babel": "^0.2.3",
+        "@tailwindcss/vite": "^4.2.4",
+        "@types/react": "^19.1.6",
+        "@types/react-dom": "^19.1.6",
+        "@vitejs/plugin-react": "^6.0.1",
+        "autoprefixer": "^10.4.21",
+        "babel-plugin-react-compiler": "^1.0.0",
+        "postcss": "^8.5.4",
+        "react-grab": "0.1.32",
+        "tailwindcss": "^4.2.4",
+        "ts-node": "^10.9.2",
+        "typescript": "^6.0.3",
+        "vite": "^8.0.10",
+        "vite-plugin-svgr": "^5.2.0"
+    }
+}

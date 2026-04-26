@@ -1,0 +1,36 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "sqlite"
+    url      = env("DATABASE_URL")
+}
+
+model TunnelToken {
+    id             String          @id @default(uuid())
+    token          String          @unique
+    tokenPreview   String?
+    name           String
+    maxTunnels     Int             @default(10)
+    currentTunnels Int             @default(0)
+    createdAt      DateTime        @default(now())
+    lastUsed       DateTime?
+    isActive       Boolean         @default(true)
+    sessions       TunnelSession[]
+}
+
+model TunnelSession {
+    id            String      @id @default(uuid())
+    subdomain     String      @unique
+    tokenId       String
+    createdAt     DateTime    @default(now())
+    lastActive    DateTime    @default(now())
+    isActive      Boolean     @default(true)
+    clientVersion String?
+    clientIp      String?
+    tunnelToken   TunnelToken @relation(fields: [tokenId], references: [id])
+}

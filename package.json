@@ -1,0 +1,48 @@
+{
+    "name": "ocean-blue-workspace",
+    "private": true,
+    "version": "1.0.0",
+    "description": "Ocean Blue monorepo - Tunnel service with CLI, server and web",
+    "license": "MIT",
+    "type": "module",
+    "packageManager": "pnpm@10.10.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/baealex/ocean-blue"
+    },
+    "bugs": {
+        "url": "https://github.com/baealex/ocean-blue/issues"
+    },
+    "homepage": "https://github.com/baealex/ocean-blue#readme",
+    "scripts": {
+        "clean": "pnpm -r exec rm -rf dist node_modules && rm -rf node_modules",
+        "dev:server": "pnpm --parallel -F @ocean-blue/shared -F @ocean-blue/web -F @ocean-blue/server dev",
+        "dev:cli": "pnpm -F ocean-blue dev",
+        "dev:cli:local": "pnpm -F ocean-blue dev:local",
+        "lint": "biome lint packages/*/src scripts",
+        "test": "pnpm -r --if-present test",
+        "test:ci": "pnpm -r --if-present test:ci",
+        "type-check": "pnpm -F @ocean-blue/shared build && pnpm -r --if-present type-check",
+        "check": "pnpm lint && pnpm type-check && pnpm build",
+        "build": "pnpm -r build",
+        "start": "pnpm build && pnpm -F @ocean-blue/server start",
+        "smoke:tunnel": "pnpm build && node scripts/tunnel-smoke/run-baseline.mjs",
+        "publish:cli": "pnpm -F ocean-blue deploy"
+    },
+    "engines": {
+        "node": ">=22.12.0",
+        "pnpm": ">=10.10.0"
+    },
+    "devDependencies": {
+        "@biomejs/biome": "^2.4.13",
+        "lefthook": "^1.13.6",
+        "vitest": "^4.1.5"
+    },
+    "pnpm": {
+        "overrides": {
+            "dompurify": "3.4.1",
+            "lodash": "4.18.1",
+            "qs": "6.15.1"
+        }
+    }
+}

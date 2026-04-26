@@ -1,0 +1,59 @@
+{
+    "$schema": "https://biomejs.dev/schemas/2.4.13/schema.json",
+    "vcs": {
+        "enabled": true,
+        "clientKind": "git",
+        "useIgnoreFile": true
+    },
+    "files": {
+        "ignoreUnknown": true,
+        "includes": [
+            "**",
+            "!**/dist",
+            "!**/node_modules",
+            "!**/coverage",
+            "!**/.turbo",
+            "!pnpm-lock.yaml"
+        ]
+    },
+    "formatter": {
+        "enabled": false,
+        "indentStyle": "space",
+        "indentWidth": 4,
+        "lineWidth": 120
+    },
+    "linter": {
+        "enabled": true,
+        "rules": {
+            "recommended": true,
+            "complexity": {
+                "noStaticOnlyClass": "off",
+                "useArrowFunction": "off",
+                "useLiteralKeys": "off"
+            },
+            "correctness": {
+                "noUnusedFunctionParameters": "off",
+                "noUnusedPrivateClassMembers": "off",
+                "noUnusedVariables": "off",
+                "useParseIntRadix": "off"
+            },
+            "suspicious": {
+                "noArrayIndexKey": "off",
+                "noExplicitAny": "off"
+            },
+            "style": {
+                "noNonNullAssertion": "off",
+                "useNodejsImportProtocol": "off",
+                "useImportType": "off"
+            },
+            "a11y": {
+                "noAutofocus": "off"
+            }
+        }
+    },
+    "css": {
+        "parser": {
+            "tailwindDirectives": true
+        }
+    }
+}
