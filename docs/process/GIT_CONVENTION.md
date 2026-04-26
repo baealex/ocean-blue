@@ -74,10 +74,10 @@ Use these shortcode labels exactly:
 1. CI checks (`lint`, `type-check`, `build`) pass.
 2. Local validation for the changed scope is complete.
 3. Any docs, scripts, or env changes are documented in the PR body.
-4. Release-impacting changes include a version and tag plan.
+4. Deployment-impacting changes include a manual verification plan.
 
-### 3-5. Release-Impact PR
-Changes in the files below are treated as release-impacting:
+### 3-5. Deployment-Impact PR
+Changes in the files below are treated as deployment-impacting:
 1. `packages/cli/package.json`
 2. `Dockerfile`
 3. `docker-compose.yml`
@@ -85,10 +85,10 @@ Changes in the files below are treated as release-impacting:
 5. `.github/workflows/ci.yml`
 6. `docs/process/DEPLOYMENT_RELEASE_STRATEGY.md`
 
-Release-impact PRs must include:
-1. Expected release version.
-2. Tag plan, for example `cli-v0.1.0` or `v0.1.0`.
-3. Verification result, for example `pnpm check` or `pnpm smoke:tunnel` pass.
+Deployment-impact PRs must include:
+1. Manual deployment target, such as local CLI npm publish or Docker `latest` image publish.
+2. Verification result, for example `pnpm check`, `npm pack --dry-run`, or `pnpm smoke:tunnel` pass.
+3. Rollback or retry note when the change affects runtime behavior.
 
 ### 3-6. Merge Policy
 - Default: merge commit.
