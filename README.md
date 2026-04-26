@@ -1,203 +1,153 @@
 # Ocean Blue
 
-> Secure tunneling service for local development - pnpm workspace monorepo
+**Self-hosted, open-source tunneling service** for local development and public subdomains.
 
-Ocean Blue lets you expose a local app through a public subdomain you control.
-The web dashboard creates tunnel keys, and the CLI uses those keys to connect
-your local server to Ocean Blue.
+Expose your local app. Own the tunnel server. No hosted account required.
 
-## Structure
+> Ocean Blue gives your local app a clear public route through a server you control.
 
-```
-ocean-blue/
-├── packages/
-│   ├── cli/        # ocean-blue CLI tool
-│   ├── server/     # Tunnel server & API
-│   ├── web/        # Web frontend (React)
-│   └── shared/     # Shared types & utilities
-├── pnpm-workspace.yaml
-└── package.json
-```
+### Why Ocean Blue?
+
+- **Self-hosted tunnel server**: Run the dashboard, API, and proxy yourself.
+- **Simple CLI**: Connect a local port with one `ocean-blue proxy` command.
+- **Subdomain routing**: Claim names like `myapp` and open `myapp.localhost:25830`.
+- **Tunnel keys**: Create a key in the dashboard and use it from the CLI.
+- **Quick setup**: The server starts in local open mode by default.
+
+<br>
 
 ## Quick Start
 
-### Prerequisites
-
-- Node.js >= 22.12.0
-- pnpm >= 10.10.0
-
-### Installation
+Start the server:
 
 ```bash
-# Install dependencies for all packages
+docker run -d \
+    -v ./data:/data \
+    -p 25830:25830 \
+    baealex/ocean-blue
+```
+
+Open `http://localhost:25830`, then create a tunnel key. The full key is shown once.
+
+Start any local app:
+
+```bash
+python3 -m http.server 3000
+```
+
+Connect it through Ocean Blue:
+
+```bash
+npx ocean-blue proxy \
+    --server http://localhost:25830 \
+    --local-port 3000 \
+    --subdomain myapp \
+    --token tk_xxx
+```
+
+Open `http://myapp.localhost:25830`.
+
+<br>
+
+## Password Mode
+
+Use password mode when the dashboard is exposed beyond a trusted local network:
+
+```bash
+docker run -d \
+    -e OCEAN_BLUE_AUTH_PASSWORD=change-me \
+    -e OCEAN_BLUE_SESSION_SECRET=replace-with-long-random-secret \
+    -v ./data:/data \
+    -p 25830:25830 \
+    baealex/ocean-blue
+```
+
+<br>
+
+## CLI
+
+Install globally if preferred:
+
+```bash
+npm install -g ocean-blue
+```
+
+Save a tunnel key through the server auth flow:
+
+```bash
+npx ocean-blue auth --login --server http://localhost:25830
+```
+
+After that, `--token` can be omitted:
+
+```bash
+npx ocean-blue proxy \
+    --server http://localhost:25830 \
+    --local-port 3000 \
+    --subdomain myapp
+```
+
+| Command | Purpose |
+|---------|---------|
+| `ocean-blue proxy --server <url> --local-port <port> --subdomain <name> --token <key>` | Start a tunnel |
+| `ocean-blue auth --login --server <url>` | Save a key through the browser auth flow |
+| `ocean-blue auth --status` | Check saved key status |
+| `ocean-blue auth --logout` | Remove the saved key |
+
+<br>
+
+## From Source
+
+```bash
 pnpm install
-
-# Copy environment variables for local package scripts
 cp .env.example packages/server/.env
-# Edit packages/server/.env and set OCEAN_BLUE_AUTH_PASSWORD and OCEAN_BLUE_SESSION_SECRET
+pnpm dev:server
 ```
 
-### Development
+In another terminal:
 
 ```bash
-# Run web + server in development mode
-pnpm dev:server
-
-# Run CLI in development mode (connects to localhost:25830)
 pnpm dev:cli:local
 ```
 
-### Individual Package Development
+Useful checks:
 
 ```bash
-# Server + Web
-pnpm dev:server
-
-# CLI only
-pnpm dev:cli
-
-# CLI with local server
-pnpm dev:cli:local
-```
-
-## Build
-
-```bash
-# Build all packages
-pnpm build
-
-# Run the standard project check
-pnpm check
-
-# Run package test suites
 pnpm test:ci
+pnpm check
 ```
 
-## Available Scripts
+<br>
 
-| Script | Description |
-|--------|-------------|
-| `pnpm dev:server` | Run web + server |
-| `pnpm dev:cli:local` | Run CLI connecting to localhost |
-| `pnpm lint` | Run Biome lint |
-| `pnpm type-check` | Build shared types, then type-check packages |
-| `pnpm test:ci` | Run all package test suites |
-| `pnpm check` | Run lint, type-check, and build |
-| `pnpm build` | Build all packages |
-| `pnpm clean` | Clean all dist folders and node_modules |
+## Features
 
-## Packages
+| Feature | Description |
+|---------|-------------|
+| Dashboard | Create tunnel keys and inspect sessions |
+| CLI proxy | Expose a local port through an Ocean Blue server |
+| Session view | See connected subdomains and owning keys |
+| Password auth | Protect the dashboard with a shared password |
+| SQLite storage | Simple default storage through Prisma |
+| Docker image | Run the server with Docker |
 
-### ocean-blue
-
-CLI tool for creating secure tunnels to localhost.
-
-```bash
-cd packages/cli
-pnpm dev           # Run CLI (production server)
-pnpm dev:local     # Run CLI (localhost server)
-pnpm build         # Build for publishing
-```
-
-### @ocean-blue/server
-
-Express-based tunnel server with GraphQL API.
-
-```bash
-cd packages/server
-pnpm dev           # Run server with hot reload
-pnpm build         # Build for production
-```
-
-### @ocean-blue/web
-
-React-based web frontend for tunnel key and session management.
-
-```bash
-cd packages/web
-pnpm dev           # Run Vite dev server
-pnpm build         # Build for production
-```
-
-### @ocean-blue/shared
-
-Shared TypeScript types and utilities.
-
-```bash
-cd packages/shared
-pnpm build         # Build shared types
-```
-
-## Self-Hosting with Docker
-
-```bash
-# Copy environment variables
-cp .env.example .env
-# Edit .env — set OCEAN_BLUE_AUTH_PASSWORD and OCEAN_BLUE_SESSION_SECRET
-
-# Start the service
-docker compose up -d
-```
-
-## Testing Local Tunnel Flow
-
-```bash
-# Terminal 1: Start server
-pnpm dev:server
-
-# Terminal 2: Start local app on any port
-# (e.g., npm start, python -m http.server 8080, etc.)
-
-# Terminal 3: Create a tunnel key in the dashboard, then connect the CLI
-ocean-blue proxy --server http://localhost:25830 --local-port 8080 --subdomain myapp --token tk_xxx
-```
-
-The CLI option is named `--token` for compatibility, but the value is the
-tunnel key copied from the dashboard. The full key is shown only once.
-
-## Authentication Modes
-
-- `password` mode: set `OCEAN_BLUE_AUTH_PASSWORD` and `OCEAN_BLUE_SESSION_SECRET`
-- `open` mode: set `OCEAN_BLUE_ALLOW_INSECURE_NO_AUTH=true` only in trusted local environments
-- Optional tunnel proxy hardening:
-  - `TUNNEL_PROXY_BODY_LIMIT` (default: `10mb`)
-  - `TUNNEL_PROXY_RATE_LIMIT_WINDOW_MS` (default: `60000`)
-  - `TUNNEL_PROXY_RATE_LIMIT_MAX` (default: `600`)
-
-Ocean Blue is fail-closed by default. If neither mode is configured, the server exits on startup instead of silently running without auth.
+<br>
 
 ## Security
 
-- Do not commit `.env` files or local databases.
-- Use a long random `OCEAN_BLUE_SESSION_SECRET`.
-- Do not run `OCEAN_BLUE_ALLOW_INSECURE_NO_AUTH=true` on public networks.
+- Keep tunnel keys private.
+- The default server mode is intended for trusted local use.
+- Use password mode before exposing the dashboard publicly.
 - Rotate tunnel keys if they are exposed.
 
 See [SECURITY.md](SECURITY.md) for vulnerability reporting.
 
-## Publishing CLI
-
-```bash
-npm login
-pnpm publish:cli
-```
-
-The local publish command runs the CLI test suite first. `npm publish` then
-builds the package through `prepublishOnly` and publishes `ocean-blue@0.1.0`.
-
-**Note**: The CLI bundles `@ocean-blue/shared` during build, so no workspace dependencies are published.
-
-## Monorepo Benefits
-
-1. **Shared Types**: Server and CLI share tunnel protocol types via `@ocean-blue/shared`
-2. **Fast Development**: Instant type updates across packages
-3. **Efficient Builds**: pnpm caches and parallelizes builds
-4. **Clean Publishing**: CLI bundles dependencies, no workspace refs in npm
+<br>
 
 ## Links
 
-- **CLI Package**: [ocean-blue on npm](https://www.npmjs.com/package/ocean-blue)
-- **Repository**: [github.com/baealex/ocean-blue](https://github.com/baealex/ocean-blue)
+- npm: [ocean-blue](https://www.npmjs.com/package/ocean-blue)
+- Repository: [github.com/baealex/ocean-blue](https://github.com/baealex/ocean-blue)
+- Contributing: [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## License
 
