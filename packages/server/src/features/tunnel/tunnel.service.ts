@@ -8,6 +8,7 @@ import path from 'path';
 import { TunnelAuthService } from '../auth/tunnel-auth.service.js';
 import models from '~/models.js';
 import { appLogger } from '~/core/index.js';
+import { getRequestClientIp } from './client-ip.js';
 import {
     PROXY_DATA_TYPE,
     PROXY_END_TYPE,
@@ -102,17 +103,6 @@ function createBinaryFrame(type: number, id: string, payload: Uint8Array = Buffe
     header.writeUInt8(idBuffer.length, 1);
 
     return Buffer.concat([header, idBuffer, Buffer.from(payload)]);
-}
-
-function getRequestClientIp(req: http.IncomingMessage): string | null {
-    const forwarded = req.headers['x-forwarded-for'];
-    const realIp = req.headers['x-real-ip'];
-    const rawIp = Array.isArray(forwarded)
-        ? forwarded[0]
-        : forwarded || (Array.isArray(realIp) ? realIp[0] : realIp) || req.socket.remoteAddress;
-    const firstIp = rawIp?.split(',')[0]?.trim();
-
-    return firstIp || null;
 }
 
 // Tunnel server class
@@ -291,11 +281,7 @@ export class TunnelServer {
             ? Buffer.concat([requestHeadBuffer, head])
             : requestHeadBuffer;
 
-        const clientIP = request.headers['x-forwarded-for']
-            || request.headers['x-real-ip']
-            || socket.remoteAddress
-            || 'unknown';
-        const displayIP = Array.isArray(clientIP) ? clientIP[0] : clientIP;
+        const displayIP = getRequestClientIp(request) || 'unknown';
 
         appLogger.info(`[${requestId}] New upgrade request from ${displayIP}: ${request.method} ${request.url} for ${subdomain}`);
 
@@ -722,26 +708,20 @@ export class TunnelServer {
         socket.once('error', errorListener);
 
         try {
-            // Extract client IP
-            const clientIP = req.headers['x-forwarded-for'] ||
-                req.headers['x-real-ip'] ||
-                req.socket.remoteAddress ||
-                'unknown';
-
             const rawBody = (req as RawBodyRequest).rawBody;
             const bodyBuffer = Buffer.isBuffer(rawBody)
                 ? rawBody
                 : Buffer.alloc(0);
             const requestBuffer = buildRawHttpRequest(req, bodyBuffer);
 
-            const displayIP = Array.isArray(clientIP) ? clientIP[0] : clientIP;
+            const displayIP = getRequestClientIp(req) || 'unknown';
             appLogger.info(`[${requestId}] New request from ${displayIP}: ${req.method} ${req.url} for ${subdomain}, size: ${requestBuffer.length}`);
 
             this.send(ws, {
                 type: 'proxy_request',
                 id: requestId,
                 data: requestBuffer.toString('base64'),
-                clientIP: Array.isArray(clientIP) ? clientIP[0] : clientIP,
+                clientIP: displayIP,
                 timestamp: Date.now()
             });
         } catch (err) {
