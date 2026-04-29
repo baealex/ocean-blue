@@ -5,7 +5,7 @@ import chalk from 'chalk';
 import { TunnelConfig, TunnelMessage, ProxyRequestMessage } from './types.js';
 import authManager from './auth.js';
 import configManager from './config.js';
-import DashboardServer from './dashboard/dashboard-server.js';
+import DashboardServer, { DASHBOARD_HOST } from './dashboard/dashboard-server.js';
 import { CLI_VERSION } from './version.js';
 import { resolveConnectionParams, DEFAULT_SERVER_HOST, DEFAULT_SERVER_PORT } from '@ocean-blue/shared';
 
@@ -195,7 +195,7 @@ class TunnelClient {
             localPort: this.config.localPort
         });
 
-        const dashboardUrl = `http://localhost:${dashboardPort}`;
+        const dashboardUrl = `http://${DASHBOARD_HOST}:${dashboardPort}`;
 
         // Simple CLI output
         console.log('');

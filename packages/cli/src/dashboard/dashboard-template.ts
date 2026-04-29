@@ -243,9 +243,11 @@ export function getDashboardHTML(): string {
             min-width: 0;
             min-height: 46px;
             align-items: center;
+            overflow: hidden;
             padding: 13px 16px;
             color: var(--soft);
             font-size: 13px;
+            text-overflow: ellipsis;
             white-space: nowrap;
         }
 
@@ -258,19 +260,27 @@ export function getDashboardHTML(): string {
             text-transform: uppercase;
         }
 
-        .path {
+        .log-text {
+            display: block;
+            min-width: 0;
+            max-width: 100%;
             overflow: hidden;
             text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .pill {
             display: inline-flex;
             min-width: 54px;
+            max-width: 100%;
+            overflow: hidden;
             justify-content: center;
             border-radius: 999px;
             padding: 5px 9px;
             font-size: 12px;
             font-weight: 800;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .method { background: rgba(14, 165, 233, 0.1); color: var(--brand-strong); }
@@ -526,13 +536,13 @@ export function getDashboardHTML(): string {
                 const size = formatBytes((request.requestSize || 0) + (request.responseSize || 0));
 
                 return '<div class="log-row" role="row">' +
-                    '<div class="log-cell">' + escapeHtml(formatTime(request.timestamp)) + '</div>' +
+                    '<div class="log-cell"><span class="log-text">' + escapeHtml(formatTime(request.timestamp)) + '</span></div>' +
                     '<div class="log-cell"><span class="pill method">' + escapeHtml(request.method || '-') + '</span></div>' +
-                    '<div class="log-cell path" title="' + escapeHtml(request.path || '/') + '">' + escapeHtml(request.path || '/') + '</div>' +
+                    '<div class="log-cell"><span class="log-text path" title="' + escapeHtml(request.path || '/') + '">' + escapeHtml(request.path || '/') + '</span></div>' +
                     '<div class="log-cell"><span class="pill status-code ' + statusClass + '">' + escapeHtml(request.status || '-') + '</span></div>' +
-                    '<div class="log-cell">' + escapeHtml(request.ip || '-') + '</div>' +
-                    '<div class="log-cell">' + escapeHtml(size) + '</div>' +
-                    '<div class="log-cell">' + escapeHtml(request.timeMs || 0) + ' ms</div>' +
+                    '<div class="log-cell"><span class="log-text ip" title="' + escapeHtml(request.ip || '-') + '">' + escapeHtml(request.ip || '-') + '</span></div>' +
+                    '<div class="log-cell"><span class="log-text">' + escapeHtml(size) + '</span></div>' +
+                    '<div class="log-cell"><span class="log-text">' + escapeHtml(request.timeMs || 0) + ' ms</span></div>' +
                 '</div>';
             }).join('');
         }

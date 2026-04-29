@@ -3,6 +3,8 @@ import { WebSocketServer, WebSocket } from 'ws';
 import { AddressInfo } from 'net';
 import { getDashboardHTML } from './dashboard-template.js';
 
+export const DASHBOARD_HOST = '127.0.0.1';
+
 export interface DashboardConfig {
     port?: number;
     subdomain?: string;
@@ -79,8 +81,9 @@ export class DashboardServer {
                 });
             });
 
-            this.server.listen(this.port, () => {
+            this.server.listen(this.port, DASHBOARD_HOST, () => {
                 const address = this.server?.address() as AddressInfo;
+                this.port = address.port;
                 resolve(address.port);
             });
 
@@ -174,6 +177,10 @@ export class DashboardServer {
 
     public getPort(): number {
         return this.port;
+    }
+
+    public getAddress(): AddressInfo | string | null {
+        return this.server?.address() ?? null;
     }
 }
 
