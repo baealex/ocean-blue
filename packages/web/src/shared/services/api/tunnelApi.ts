@@ -13,11 +13,27 @@ import type {
 } from './types';
 import { tunnelQueryKeys } from './queryKeys';
 
+type CsrfSessionResponse = { csrfToken?: string };
+
+async function readCsrfToken() {
+    const response = await fetch('/api/auth/session', { credentials: 'include' });
+    if (!response.ok) return undefined;
+
+    const session = await response.json() as CsrfSessionResponse;
+    return session.csrfToken;
+}
+
+const isMutation = (query: string) => /^\s*mutation\b/.test(query);
+
 // GraphQL client function
 async function fetchGraphQL<T>(query: string, variables: Record<string, unknown> = {}): Promise<T> {
+    const csrfToken = isMutation(query) ? await readCsrfToken() : undefined;
     const response = await fetch('/graphql', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json',
+            ...(csrfToken ? { 'x-csrf-token': csrfToken } : {})
+        },
         body: JSON.stringify({
             query,
             variables

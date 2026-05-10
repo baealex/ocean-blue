@@ -47,7 +47,7 @@ export async function startGraphqlServer() {
         } catch (error) {
             res.writeHead(500, { 'content-type': 'application/json' });
             res.end(JSON.stringify({
-                error: error instanceof Error ? error.message : String(error)
+                error: 'Internal Server Error'
             }));
         }
     });

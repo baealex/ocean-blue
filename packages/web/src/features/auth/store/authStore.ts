@@ -1,7 +1,9 @@
 import type { AuthSessionResponse } from '@baejino/auth';
+
+type OceanBlueAuthSession = AuthSessionResponse & { csrfToken?: string };
 import { create } from 'zustand';
 
-const OPEN_SESSION: AuthSessionResponse = {
+const OPEN_SESSION: OceanBlueAuthSession = {
     mode: 'open',
     authRequired: false,
     authenticated: false
@@ -13,7 +15,7 @@ const canAccess = (session: AuthSessionResponse | null) => {
 };
 
 interface AuthState {
-    session: AuthSessionResponse | null;
+    session: OceanBlueAuthSession | null;
     isAuthenticated: boolean;
     isLoading: boolean;
     error: string | null;
@@ -30,7 +32,7 @@ const readError = async (response: Response, fallback: string) => {
     }
 };
 
-export const useAuthStore = create<AuthState>((set) => ({
+export const useAuthStore = create<AuthState>((set, get) => ({
     session: null,
     isAuthenticated: false,
     isLoading: true,
@@ -40,16 +42,18 @@ export const useAuthStore = create<AuthState>((set) => ({
         set({ isLoading: true, error: null });
 
         try {
+            const csrfToken = get().session?.csrfToken;
             const response = await fetch('/api/auth/logout', {
                 method: 'POST',
-                credentials: 'include'
+                credentials: 'include',
+                headers: csrfToken ? { 'x-csrf-token': csrfToken } : undefined
             });
 
             if (!response.ok) {
                 throw new Error(await readError(response, 'Logout failed'));
             }
 
-            const session = await response.json() as AuthSessionResponse;
+            const session = await response.json() as OceanBlueAuthSession;
 
             set({
                 session,
@@ -79,7 +83,7 @@ export const useAuthStore = create<AuthState>((set) => ({
                 return;
             }
 
-            const session = await response.json() as AuthSessionResponse;
+            const session = await response.json() as OceanBlueAuthSession;
 
             set({
                 session,
