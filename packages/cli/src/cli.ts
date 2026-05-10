@@ -86,7 +86,7 @@ program
             console.log(chalk.gray(`Ocean Blue server: ${server.serverUrl}`));
             console.log(chalk.gray(`Local app port: ${config.localPort}`));
             console.log(chalk.gray(`Public subdomain: ${config.subdomain}`));
-            console.log(chalk.gray(`Tunnel key: ${config.apiKey?.substring(0, 8)}...`));
+            console.log(chalk.gray('Tunnel key: configured'));
             console.log('');
 
             const client = new TunnelClient(config);
@@ -124,13 +124,13 @@ program
             if (options.login) {
                 console.log(chalk.blue('Starting authentication flow...'));
                 try {
-                    const apiKey = await authManager.getApiKey({
+                    await authManager.getApiKey({
                         serverHost: server.serverHost,
                         serverPort: server.serverPort,
                         serverProtocol: server.serverProtocol
                     });
                     console.log(chalk.green('✓ Authentication successful!'));
-                    console.log(chalk.gray(`Tunnel key: ${apiKey.substring(0, 8)}...`));
+                    console.log(chalk.gray('Tunnel key: saved'));
                 } catch (error) {
                     console.error(chalk.red('Authentication failed:'), error);
                     process.exit(1);
@@ -142,7 +142,7 @@ program
                 const apiKey = configManager.getApiKey();
                 if (apiKey) {
                     console.log(chalk.green('✓ You are authenticated'));
-                    console.log(chalk.gray(`Tunnel key: ${apiKey.substring(0, 8)}...`));
+                    console.log(chalk.gray('Tunnel key: saved'));
                 } else {
                     console.log(chalk.yellow('⚠️ Not authenticated. Run `ocean-blue auth --login` to authenticate.'));
                 }

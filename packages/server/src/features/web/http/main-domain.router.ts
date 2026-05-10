@@ -8,7 +8,7 @@ import type { AuthConfig } from '@baejino/auth';
 
 import { logger } from '~/core/index.js';
 import { depthLimitRule } from '~/core/graphql-depth-limit.js';
-import { createSessionMiddleware, isAuthenticatedRequest, requireSessionForGraphql } from '~/modules/auth-guard.js';
+import { createSessionMiddleware, isAuthenticatedRequest, requireCsrfForGraphqlMutation, requireSessionForGraphql } from '~/modules/auth-guard.js';
 import { authLimiter } from '~/features/auth/auth.router.js';
 import { loginPage, loginPageSubmit, logoutPageSubmit } from '~/features/auth/http/pages.js';
 import apiRouter from '~/features/http/api.router.js';
@@ -82,7 +82,7 @@ export function createMainDomainRouter({
         res.redirect(303, `${LOGIN_ROUTE_PATH}?redirectTo=${redirectTarget}`);
     });
     router.use(express.static(webDistPath, { extensions: ['html'] }));
-    router.use('/graphql', requireSessionForGraphql(authConfig), createHandler({
+    router.use('/graphql', requireSessionForGraphql(authConfig), requireCsrfForGraphqlMutation(authConfig), createHandler({
         schema,
         context: (req) => ({
             authMode: authConfig.mode,

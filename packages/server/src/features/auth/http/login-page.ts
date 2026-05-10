@@ -8,6 +8,7 @@ const escapeHtml = (value: string) =>
 
 interface LoginPageParams {
     redirectTo: string;
+    csrfToken: string;
     errorMessage?: string;
 }
 
@@ -19,7 +20,7 @@ const renderErrorBlock = (errorMessage?: string) => {
     return `<div class="error" role="alert">${escapeHtml(errorMessage)}</div>`;
 };
 
-export const renderLoginPage = ({ redirectTo, errorMessage }: LoginPageParams) => `<!doctype html>
+export const renderLoginPage = ({ redirectTo, csrfToken, errorMessage }: LoginPageParams) => `<!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -186,6 +187,7 @@ export const renderLoginPage = ({ redirectTo, errorMessage }: LoginPageParams) =
             ${renderErrorBlock(errorMessage)}
             <form method="post" action="/login">
                 <input type="hidden" name="redirectTo" value="${escapeHtml(redirectTo)}" />
+                <input type="hidden" name="csrfToken" value="${escapeHtml(csrfToken)}" />
                 <div class="field">
                     <label for="password">Password</label>
                     <input id="password" name="password" type="password" autocomplete="current-password" required autofocus />

@@ -22,6 +22,17 @@ interface ConfigData {
     localPort?: number;
 }
 
+const getSafePublicUrl = (value?: string) => {
+    if (!value) return undefined;
+
+    try {
+        const parsed = new URL(value);
+        return parsed.protocol === 'http:' || parsed.protocol === 'https:' ? parsed.toString() : undefined;
+    } catch {
+        return undefined;
+    }
+};
+
 const pageShellClassName = 'mx-auto flex min-h-screen max-w-[1600px] flex-col bg-[linear-gradient(135deg,#0f1419_0%,#1a1f2e_100%)] px-6 py-6 text-slate-200';
 const headerClassName = 'relative mb-6 overflow-hidden rounded-2xl bg-[linear-gradient(135deg,#667eea_0%,#764ba2_100%)] px-8 py-8 shadow-[0_10px_40px_rgba(102,126,234,0.4)]';
 const statsGridClassName = 'mb-6 grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(280px,1fr))]';
@@ -105,6 +116,8 @@ const TunnelStats = () => {
 
     useEffect(() => {
         const handleMessage = (event: MessageEvent) => {
+            if (event.source !== window.parent || event.origin !== window.location.origin) return;
+
             const message = event.data;
 
             if (!message?.type) return;
@@ -112,7 +125,12 @@ const TunnelStats = () => {
             switch (message.type) {
                 case 'init':
                     if (message.data) {
-                        if (message.data.config) setConfig(message.data.config);
+                        if (message.data.config) {
+                            setConfig({
+                                ...message.data.config,
+                                publicUrl: getSafePublicUrl(message.data.config.publicUrl)
+                            });
+                        }
                         if (message.data.status) setStatus(message.data.status);
                         if (message.data.stats) setStats(message.data.stats);
                         if (message.data.requests) setRequests(message.data.requests);
@@ -155,6 +173,7 @@ const TunnelStats = () => {
     };
 
     const statusBadge = getStatusBadgeClassName(status);
+    const safePublicUrl = getSafePublicUrl(config.publicUrl);
 
     return (
         <div className={pageShellClassName}>
@@ -191,12 +210,12 @@ const TunnelStats = () => {
                         <div className="flex items-center justify-center rounded-lg border border-white/20 bg-white/15 px-6 py-4 text-sm backdrop-blur-[10px] transition duration-250 hover:-translate-y-0.5 hover:bg-white/20">
                             <strong className="mr-2 opacity-90">Public URL:</strong>
                             <a
-                                href={config.publicUrl || '#'}
+                                href={safePublicUrl || '#'}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="font-semibold text-yellow-300 transition hover:text-yellow-200 hover:underline"
                             >
-                                {config.publicUrl || '-'}
+                                {safePublicUrl || '-'}
                             </a>
                         </div>
 
