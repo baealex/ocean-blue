@@ -115,6 +115,8 @@ Useful checks:
 ```bash
 pnpm test:ci
 pnpm check
+pnpm smoke:cli-package
+pnpm smoke:tunnel
 ```
 
 <br>
