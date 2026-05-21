@@ -105,7 +105,7 @@ export async function startBasicHttpServer() {
         } catch (error) {
             sendJson(res, 500, {
                 ok: false,
-                error: error instanceof Error ? error.message : String(error)
+                error: 'Internal Server Error'
             });
         }
     });

@@ -16,10 +16,11 @@ const escapeHtml = (value: string) => {
         .replaceAll("'", '&#39;');
 };
 
-const isLocalhost = (url: string): boolean => {
+const isLocalhostCallbackUrl = (url: string): boolean => {
     try {
         const parsed = new URL(url);
-        return parsed.hostname === 'localhost' || parsed.hostname === '127.0.0.1';
+        return parsed.protocol === 'http:'
+            && (parsed.hostname === 'localhost' || parsed.hostname === '127.0.0.1' || parsed.hostname === '[::1]');
     } catch {
         return false;
     }
@@ -33,7 +34,7 @@ const createDeviceToken = async (deviceId: string) => {
 };
 
 const redirectWithToken = async (res: Parameters<Controller>[1], callbackUrl: string, deviceId: string) => {
-    if (!isLocalhost(callbackUrl)) {
+    if (!isLocalhostCallbackUrl(callbackUrl)) {
         res.status(400).json({ error: 'callbackUrl must point to localhost' });
         return;
     }
@@ -81,7 +82,7 @@ export const tunnelAuth: Controller = async (req, res) => {
         return;
     }
 
-    if (!isLocalhost(callbackUrl)) {
+    if (!isLocalhostCallbackUrl(callbackUrl)) {
         res.status(400).json({ error: 'callbackUrl must point to localhost' });
         return;
     }
