@@ -44,14 +44,14 @@
         "prisma": "^6.9.0",
         "uuid": "^14.0.0",
         "winston": "^3.17.0",
-        "ws": "^8.18.3"
+        "ws": "^8.20.1"
     },
     "devDependencies": {
         "@types/express": "^5.0.6",
         "@types/express-session": "^1.19.0",
-        "glob": "^11.0.0",
-        "tsc-alias": "^1.8.10",
-        "tsup": "^8.0.0",
+        "glob": "^13.0.6",
+        "tsc-alias": "^1.8.17",
+        "tsup": "^8.5.1",
         "tsx": "^4.0.0",
         "typescript": "^6.0.3"
     }
