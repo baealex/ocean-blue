@@ -59,9 +59,7 @@ pnpm check
 5. Verify the package contents.
 
 ```bash
-pnpm -F ocean-blue build
-cd packages/cli
-npm pack --dry-run
+pnpm smoke:cli-package
 ```
 
 Expected package contents:
@@ -71,6 +69,11 @@ Expected package contents:
 - `README.md`
 - `LICENSE`
 - `package.json`
+
+Expected runtime checks:
+- the packed `dist/cli.js` keeps its node shebang and executable mode
+- the packed CLI returns the package version with `--version`
+- the packed CLI renders command help with `--help`
 
 6. Confirm npm Trusted Publishing is registered for the package and workflow.
 
