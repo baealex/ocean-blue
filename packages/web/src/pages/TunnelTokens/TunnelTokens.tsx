@@ -17,6 +17,7 @@ import { formatDate } from '~/shared/utils/date';
 
 const PAGE_SHELL = 'text-slate-950';
 const PAGE_CONTAINER = 'flex w-full flex-col gap-6';
+const SUCCESS_BADGE_CLASS = 'border-ocean-blue-success-border bg-ocean-blue-success-surface text-ocean-blue-success-text';
 
 const FILTER_OPTIONS = [
   { label: 'All', value: 'all' },
@@ -42,7 +43,7 @@ function CopyButton({
   return (
     <IconButton
       aria-label={title}
-      className={copied ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : undefined}
+      className={copied ? SUCCESS_BADGE_CLASS : undefined}
       onClick={onClick}
       title={title}
     >
@@ -97,7 +98,7 @@ function TokenSessionCount({
         className={`inline-flex shrink-0 items-center justify-center rounded-full border font-semibold ${
           isCompact ? 'h-8 min-w-8 px-2 text-xs' : 'h-10 min-w-10 px-3 text-sm'
         } ${
-          hasSessions ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : 'border-sky-100 bg-sky-50 text-sky-700'
+          hasSessions ? SUCCESS_BADGE_CLASS : 'border-sky-100 bg-sky-50 text-sky-700'
         }`}
       >
         {sessionCount}
@@ -160,7 +161,7 @@ function RunningSessionsSummary({
               className="inline-flex h-9 items-center gap-2.5 rounded-full border border-sky-100 bg-white/65 px-3 text-sm font-semibold text-slate-900 backdrop-blur-xl transition hover:border-sky-200 hover:bg-white/85 focus:outline-none focus:ring-4 focus:ring-sky-100"
               to="/sessions"
             >
-              <span className="inline-flex h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_0_4px_rgba(16,185,129,0.12)]" />
+              <span className="inline-flex h-2 w-2 rounded-full bg-ocean-blue-success-indicator shadow-ocean-blue-success-indicator" />
               {isLoading ? 'Checking sessions' : sessionLabel}
               <FaExternalLinkAlt className="text-xs text-slate-500" />
             </Link>
@@ -259,16 +260,16 @@ const TunnelTokens = () => {
     <div className={PAGE_SHELL}>
       <main className={PAGE_CONTAINER}>
         {error ? (
-          <div className="rounded-3xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm font-medium text-rose-700">{error}</div>
+          <div className="rounded-3xl border border-ocean-blue-danger-border bg-ocean-blue-danger-surface px-5 py-4 text-sm font-medium text-ocean-blue-danger-text">{error}</div>
         ) : null}
 
         {createdToken ? (
-          <section className="min-w-0 rounded-3xl border border-emerald-200 bg-emerald-50/90 p-4 shadow-[0_18px_50px_-34px_rgba(16,185,129,0.6)] sm:p-5">
+          <section className="min-w-0 rounded-3xl border border-ocean-blue-success-border bg-ocean-blue-success-surface-strong p-4 shadow-ocean-blue-success-surface sm:p-5">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0">
-                <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700">New tunnel key</p>
+                <p className="text-xs font-semibold uppercase tracking-wider text-ocean-blue-success-text">New tunnel key</p>
                 <h2 className="mt-1 text-base font-semibold text-slate-950">Copy this key now</h2>
-                <p className="mt-2 max-w-2xl text-sm leading-6 text-emerald-800">
+                <p className="mt-2 max-w-2xl text-sm leading-6 text-ocean-blue-success-text-strong">
                   This full key is shown only once. Copy it before closing this message.
                 </p>
               </div>

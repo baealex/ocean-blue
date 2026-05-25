@@ -24,11 +24,22 @@
     --color-ocean-blue-accent-hover: var(--ocean-blue-color-accent-hover);
     --color-ocean-blue-border: var(--ocean-blue-color-border);
     --color-ocean-blue-focus: var(--ocean-blue-color-focus);
+    --color-ocean-blue-danger-border: var(--ocean-blue-color-danger-border);
+    --color-ocean-blue-danger-surface: var(--ocean-blue-color-danger-surface);
+    --color-ocean-blue-danger-text: var(--ocean-blue-color-danger-text);
     --color-ocean-blue-muted: var(--ocean-blue-color-text-muted);
+    --color-ocean-blue-success-border: var(--ocean-blue-color-success-border);
+    --color-ocean-blue-success-indicator: var(--ocean-blue-color-success-indicator);
+    --color-ocean-blue-success-surface: var(--ocean-blue-color-success-surface);
+    --color-ocean-blue-success-surface-strong: var(--ocean-blue-color-success-surface-strong);
+    --color-ocean-blue-success-text: var(--ocean-blue-color-success-text);
+    --color-ocean-blue-success-text-strong: var(--ocean-blue-color-success-text-strong);
     --color-ocean-blue-surface: var(--ocean-blue-color-surface);
     --color-ocean-blue-surface-strong: var(--ocean-blue-color-surface-strong);
     --color-ocean-blue-text: var(--ocean-blue-color-text);
     --radius-ocean-blue-panel: var(--ocean-blue-radius-panel);
+    --shadow-ocean-blue-success-indicator: var(--ocean-blue-shadow-success-indicator);
+    --shadow-ocean-blue-success-surface: var(--ocean-blue-shadow-success-surface);
     --shadow-ocean-blue-surface: var(--ocean-blue-shadow-surface);
 }
 
@@ -39,11 +50,22 @@
         --ocean-blue-color-accent-hover: #0284c7;
         --ocean-blue-color-border: rgb(224 242 254 / 80%);
         --ocean-blue-color-focus: rgb(224 242 254 / 100%);
+        --ocean-blue-color-danger-border: #fecdd3;
+        --ocean-blue-color-danger-surface: #fff1f2;
+        --ocean-blue-color-danger-text: #be123c;
+        --ocean-blue-color-success-border: #a7f3d0;
+        --ocean-blue-color-success-indicator: #10b981;
+        --ocean-blue-color-success-surface: #ecfdf5;
+        --ocean-blue-color-success-surface-strong: rgb(236 253 245 / 90%);
+        --ocean-blue-color-success-text: #047857;
+        --ocean-blue-color-success-text-strong: #065f46;
         --ocean-blue-color-surface: rgb(255 255 255 / 60%);
         --ocean-blue-color-surface-strong: rgb(255 255 255 / 90%);
         --ocean-blue-color-text: #020617;
         --ocean-blue-color-text-muted: #64748b;
         --ocean-blue-radius-panel: 1.5rem;
+        --ocean-blue-shadow-success-indicator: 0 0 0 4px rgb(16 185 129 / 12%);
+        --ocean-blue-shadow-success-surface: 0 18px 50px -34px rgb(16 185 129 / 60%);
         --ocean-blue-shadow-surface: 0 18px 60px -36px rgb(14 165 233 / 45%);
         --ocean-blue-background-app:
             radial-gradient(circle at 12% 10%, rgb(125 211 252 / 38%), transparent 30%),
