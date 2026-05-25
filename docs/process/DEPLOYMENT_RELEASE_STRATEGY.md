@@ -124,10 +124,13 @@ gh workflow run BUILD_IMAGE.yml
 gh run list --workflow BUILD_IMAGE.yml --limit 5
 ```
 
-4. Verify the pushed image.
+4. Verify the pushed image and record the digest.
+
+The manual workflow summary records the registry digest for `baealex/ocean-blue:latest` after the push. Use that digest for rollback notes and exact pull checks.
 
 ```bash
 docker pull baealex/ocean-blue:latest
+docker pull baealex/ocean-blue@sha256:<digest-from-workflow-summary>
 ```
 
 ## 6. Version and Tag Policy
