@@ -3,6 +3,10 @@ name: BUILD IMAGE
 on:
   workflow_dispatch:
 
+env:
+  IMAGE_NAME: baealex/ocean-blue
+  IMAGE_TAG: latest
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -20,12 +24,51 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push
+        id: build
         uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64/v8
           push: true
-          tags: baealex/ocean-blue:latest
+          tags: ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Summarize pushed image digest
+        env:
+          BUILD_DIGEST: ${{ steps.build.outputs.digest }}
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          IMAGE_REF: ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+        run: |
+          set -euo pipefail
+
+          docker buildx imagetools inspect "$IMAGE_REF" --format '{{json .Manifest}}' > manifest.json
+          PUSHED_DIGEST="$(jq -r '.digest // empty' manifest.json)"
+
+          if [ -z "$PUSHED_DIGEST" ]; then
+            echo "::error::Could not read pushed image digest from $IMAGE_REF"
+            exit 1
+          fi
+
+          if [ -n "$BUILD_DIGEST" ] && [ "$BUILD_DIGEST" != "$PUSHED_DIGEST" ]; then
+            echo "::warning::Build output digest ($BUILD_DIGEST) differs from registry digest ($PUSHED_DIGEST). The mutable latest tag may have changed after this push."
+          fi
+
+          {
+            echo "## Docker latest digest"
+            echo
+            echo "| Field | Value |"
+            echo "| --- | --- |"
+            echo "| Image | \`$IMAGE_REF\` |"
+            echo "| Registry digest | \`$PUSHED_DIGEST\` |"
+            echo "| Build output digest | \`${BUILD_DIGEST:-not reported}\` |"
+            echo "| Source commit | \`${GITHUB_SHA}\` |"
+            echo "| Platforms | \`linux/amd64\`, \`linux/arm64/v8\` |"
+            echo
+            echo "### Pull by digest"
+            echo
+            echo "\`\`\`bash"
+            echo "docker pull $IMAGE_NAME@$PUSHED_DIGEST"
+            echo "\`\`\`"
+          } >> "$GITHUB_STEP_SUMMARY"
