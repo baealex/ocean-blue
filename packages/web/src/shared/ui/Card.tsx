@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import type { HTMLAttributes, ReactNode } from 'react';
 
 const surfaceClassName =
-    'rounded-3xl border border-sky-100/80 bg-white/60 shadow-[0_18px_60px_-36px_rgba(14,165,233,0.45)] backdrop-blur-xl';
+    'rounded-ocean-blue-panel border border-ocean-blue-border bg-ocean-blue-surface shadow-ocean-blue-surface backdrop-blur-xl';
 
 function Card({
     as: Component = 'div',

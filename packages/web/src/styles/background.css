@@ -6,9 +6,5 @@ html,
 body {
     min-height: 100vh;
     margin: 0;
-    background:
-        radial-gradient(circle at 12% 10%, rgba(125, 211, 252, 0.38), transparent 30%),
-        radial-gradient(circle at 88% 6%, rgba(34, 211, 238, 0.22), transparent 28%),
-        radial-gradient(circle at 76% 92%, rgba(186, 230, 253, 0.48), transparent 30%),
-        linear-gradient(135deg, #f0f9ff 0%, #ecfeff 58%, #ffffff 100%);
+    background: var(--ocean-blue-background-app);
 }
