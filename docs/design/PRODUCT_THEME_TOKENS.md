@@ -20,6 +20,9 @@ Ocean Blue uses a product-owned theme instead of copying another Ocean product's
 | Accent | `--ocean-blue-color-accent` | Primary action and active navigation color |
 | Accent hover | `--ocean-blue-color-accent-hover` | Hover state for accent controls |
 | Focus | `--ocean-blue-color-focus` | Visible focus ring color |
+| Success colors | `--ocean-blue-color-success-*` | Positive state border, surface, text, and indicator colors |
+| Success shadows | `--ocean-blue-shadow-success-*` | Positive state panel and indicator shadows |
+| Danger colors | `--ocean-blue-color-danger-*` | Error state border, surface, and text colors |
 | Surface | `--ocean-blue-color-surface` | Glass-like card or panel background |
 | Surface strong | `--ocean-blue-color-surface-strong` | Stronger panel background |
 | Border | `--ocean-blue-color-border` | Subtle panel and control border |
@@ -28,7 +31,7 @@ Ocean Blue uses a product-owned theme instead of copying another Ocean product's
 | App background | `--ocean-blue-background-app` | Product canvas background |
 | Surface shadow | `--ocean-blue-shadow-surface` | Shared elevated panel shadow |
 
-Tailwind exposes matching utility tokens such as `bg-ocean-blue-surface`, `border-ocean-blue-border`, `text-ocean-blue-accent`, `ring-ocean-blue-focus`, and `shadow-ocean-blue-surface`.
+Tailwind exposes matching utility tokens such as `bg-ocean-blue-surface`, `border-ocean-blue-border`, `text-ocean-blue-accent`, `ring-ocean-blue-focus`, `shadow-ocean-blue-surface`, `bg-ocean-blue-success-surface`, and `text-ocean-blue-danger-text`.
 
 ## Usage rules
 
